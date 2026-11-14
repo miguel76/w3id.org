@@ -1,4 +1,5 @@
-# # /climate-change-kg/
+#
+# /climate-change-kg/
 #
 # Permanent identifiers of the Climate Change Knowledge Graph (CCKG), a
 # knowledge graph of climate variables, indices, models, simulations and
@@ -15,6 +16,20 @@ RewriteRule ^data/?$ https://hacid-project.github.io/climate-change-kg/data-acce
 
 # Resources of the knowledge graph: their description as linked data.
 RewriteRule ^data/(.+)$ https://keng.istc.cnr.it/climate-change-kg/id/$1 [R=303,L]
+
+# SHACL shapes of the knowledge graph. The shapes (and the namespace
+# /shapes/, whose IRIs name them) have no document of their own: if RDF is
+# requested, the file with all the shapes, in Turtle; otherwise (a browser) the
+# documentation page.
+RewriteCond %{HTTP_ACCEPT} text/turtle [OR]
+RewriteCond %{HTTP_ACCEPT} application/rdf\+xml [OR]
+RewriteCond %{HTTP_ACCEPT} application/ld\+json
+RewriteRule ^shapes(/[^.]*)?$ https://hacid-project.github.io/climate-change-kg/shapes/shapes.ttl [R=303,L]
+
+# The files of the shapes, by topic (generic.ttl, variables.ttl, ...).
+RewriteRule ^shapes/([A-Za-z0-9_-]+\.ttl)$ https://hacid-project.github.io/climate-change-kg/shapes/$1 [R=302,L]
+
+RewriteRule ^shapes(/.*)?$ https://hacid-project.github.io/climate-change-kg/shapes/ [R=303,L]
 
 # Anything else: the documentation website.
 RewriteRule ^(.*)$ https://hacid-project.github.io/climate-change-kg/$1 [R=302,L]
